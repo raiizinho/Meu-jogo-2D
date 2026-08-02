@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 public class Player extends Entity{
     private static final Logger logger = Logger.getLogger(Player.class.getName());
+    int animationPerFrame = 12;
     GamePannel gp;
     KeyHandler keyHandler;
 
@@ -63,7 +64,7 @@ public void getPlayerImage() {
             }
             // Contagem de frames para atualizar sprite(Animação)
             spriteCount++;
-            if (spriteCount > 15) {
+            if (spriteCount > animationPerFrame) {
                 if (spriteNum == 1) {
                     spriteNum = 2;
                 } else {
@@ -109,6 +110,6 @@ public void getPlayerImage() {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.tamanhoTile, gp.tamanhoTile, null);
+        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
     }
 }
