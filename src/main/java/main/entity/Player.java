@@ -11,20 +11,27 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Player extends Entity{
+public class Player extends Entity {
     private static final Logger logger = Logger.getLogger(Player.class.getName());
     int animationPerFrame = 12;
+
+
     GamePannel gp;
     KeyHandler keyHandler;
+    public final int screenX;
+    public final int screenY;
 
-    public Player (GamePannel gp, KeyHandler keyHandler) {
+    public Player(GamePannel gp, KeyHandler keyHandler) {
         this.gp = gp;
         this.keyHandler = keyHandler;
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
 
     }
-public void getPlayerImage() {
+
+    public void getPlayerImage() {
         try {
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_1.png")));
             up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_2.png")));
@@ -37,30 +44,32 @@ public void getPlayerImage() {
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Erro ao carregar imagens!");
         }
-}
+    }
+
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
-        speed = 3;
+        worldX = gp.tileSize * 24;
+        worldY = gp.tileSize * 24;
+        speed = 4;
         direction = "down";
     }
-    public void update () {
+
+    public void update() {
         if (keyHandler.up || keyHandler.right || keyHandler.down || keyHandler.left) {
             if (keyHandler.up) {
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
             }
             if (keyHandler.down) {
                 direction = "down";
-                y += speed;
+                worldY += speed;
             }
             if (keyHandler.right) {
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
             if (keyHandler.left) {
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             }
             // Contagem de frames para atualizar sprite(Animação)
             spriteCount++;
@@ -74,7 +83,8 @@ public void getPlayerImage() {
             }
         }
     }
-    public void draw (Graphics2D g2){
+
+    public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch (direction) {
             case "up":
@@ -110,6 +120,6 @@ public void getPlayerImage() {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
